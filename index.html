@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>Nosso Amor</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/833/833472.png" type="image/png" />
+
   <style>
     body {
       margin: 0;
@@ -15,15 +17,40 @@
       overflow-x: hidden;
     }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
+   h1 {
+  font-family: 'Great Vibes', cursive;
+  font-size: 3rem;
+  color: #e50914;
+  margin-bottom: 1rem;
+}
 
     #contador {
-      font-size: 2rem;
-      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
       margin-top: 0.5rem;
+    }
+
+    .caixa-tempo {
+      background: #e50914;
+      color: #141414;
+      font-weight: 700;
+      font-size: 1.4rem;
+      padding: 15px 20px;
+      border-radius: 12px;
+      min-width: 90px;
+      user-select: none;
+      box-shadow: 0 0 8px #e50914;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .unidade {
+      display: block;
+      font-weight: 300;
+      font-size: 0.9rem;
+      margin-top: 4px;
+      color: #f2f2f2;
     }
 
     p {
@@ -177,14 +204,46 @@
       border-radius: 0;
       display: block;
     }
+    #contador {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .caixa-tempo {
+    background: #333333; /* cinza escuro estilo Netflix */
+    color: #ffffff;
+    font-weight: 300; /* fonte fina */
+    font-size: 1.5rem;
+    padding: 14px 22px;
+    border-radius: 6px;
+    min-width: 80px;
+    user-select: none;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: inset 0 -2px 0 #e50914; /* linha vermelha fina embaixo */
+    text-align: center;
+  }
+
+  .unidade {
+    display: block;
+    font-weight: 300;
+    font-size: 0.9rem;
+    margin-top: 3px;
+    color: #dddddd;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
   </style>
 </head>
 <body>
 
   <h1>Colecionando histórias há:</h1>
-  <div id="contador">...</div>
+  <div id="contador">
+    <!-- Caixas de tempo serão atualizadas via JS -->
+  </div>
   <br>
-  <p>desde 7 de dezembro de 2024 às 12:23 💖</p>
 
   <p>Clique nas fotos! 💖</p>
 
@@ -266,15 +325,25 @@
         meses += 12;
       }
 
-      const texto = 
-        `${anos} ano${anos !== 1 ? 's' : ''}, ` +
-        `${meses} mes${meses !== 1 ? 'es' : ''}, ` +
-        `${dias} dia${dias !== 1 ? 's' : ''}, ` +
-        `${horas} hora${horas !== 1 ? 's' : ''}, ` +
-        `${minutos} minuto${minutos !== 1 ? 's' : ''}, ` +
-        `${segundos} segundo${segundos !== 1 ? 's' : ''}`;
+      const contador = document.getElementById("contador");
+      contador.innerHTML = '';
 
-      document.getElementById("contador").textContent = texto;
+      function criarCaixa(valor, singular, plural) {
+        const caixa = document.createElement('div');
+        caixa.className = 'caixa-tempo';
+        caixa.innerHTML = `
+          ${valor}
+          <span class="unidade">${valor === 1 ? singular : plural}</span>
+        `;
+        return caixa;
+      }
+
+      contador.appendChild(criarCaixa(anos, 'ano', 'anos'));
+      contador.appendChild(criarCaixa(meses, 'mês', 'meses'));
+      contador.appendChild(criarCaixa(dias, 'dia', 'dias'));
+      contador.appendChild(criarCaixa(horas, 'hora', 'horas'));
+      contador.appendChild(criarCaixa(minutos, 'minuto', 'minutos'));
+      contador.appendChild(criarCaixa(segundos, 'segundo', 'segundos'));
     }
 
     setInterval(atualizarContador, 1000);
@@ -380,25 +449,22 @@
       const cursorFinal = document.createElement('span');
       cursorFinal.textContent = '|';
       cursorFinal.style.animation = 'blink 1s infinite';
-      cursorFinal.style.marginLeft = '4px';
       mensagemFinal.appendChild(cursorFinal);
 
-      const som = document.getElementById("type-sound");
-
-      function escreverFinal() {
+      function digitarFinal() {
         if (i < textoFinal.length) {
-          mensagemFinal.textContent = mensagemFinal.textContent.replace('|', '') + textoFinal.charAt(i);
+          mensagemFinal.textContent = textoFinal.slice(0, i + 1);
           mensagemFinal.appendChild(cursorFinal);
-          som.currentTime = 0;
-          som.play();
           i++;
-          setTimeout(escreverFinal, 60);
+          setTimeout(digitarFinal, 50);
         } else {
           cursorFinal.style.display = 'none';
         }
       }
-      escreverFinal();
+
+      digitarFinal();
     });
+
   </script>
 </body>
 </html>
